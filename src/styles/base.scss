@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css");
+
+:root {
+  --roboto: "Roboto", sans-serif;
+}
+
+* {
+  font-family: var(--roboto);
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: white;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+#root {
+  height: 100vh;
+
+  .App{
+    width: 100%;
+    height: 100%;
+}
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  width: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.inputHolder {
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+  margin-bottom: 1vh;
+
+  .inputLabel {
+    text-align: right;
+    width: 15%;
+    white-space: nowrap;
+    font-family: monospace;
+    font-weight: 300;
+    color: hsl(0, 0%, 90%);
+  }
+
+  .inputWrapper {
+    display: flex;
+    align-items: center;
+    gap: 1vh;
+    width: 100%;
+
+    .slider {
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+        border-radius: 50%;
+        width: 2vh; /* Set a specific slider handle width */
+        height: 2vh; /* Slider handle height */
+        background: lightgray; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+      }
+
+      -webkit-appearance: none;
+      width: 100%;
+      height: 0.3vh;
+      border-radius: 5px;
+      // background: #2b2b2b;
+      background: hsl(0, 0%, 35%);
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: 0.2s;
+      transition: opacity 0.2s;
+    }
+
+    .sliderNumber {
+      &:focus-visible {
+        color: hsl(0, 0%, 80%);
+      }
+      border: none;
+      text-align: left;
+      // padding: 0 1%;
+      width: 10ch;
+      // border: 1px solid #0075ff;
+      background: #2b2b2b;
+      // border-radius: 2vh;
+      color: #6c7175;
+    }
+
+    .checkbox {
+      &::before {
+        content: "";
+        width: 15px;
+        height: 15px;
+        border-radius: 5px;
+        border: 2px solid #8cad2d;
+        background-color: #fff;
+        display: block;
+        float: left;
+        margin-right: 5px;
+        z-index: 5;
+        position: relative;
+      }
+      // -webkit-appearance: none;
+      appearance: none;
+    }
+  }
+}

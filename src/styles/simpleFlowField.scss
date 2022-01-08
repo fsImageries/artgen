@@ -1,0 +1,71 @@
+.simpleFlowField {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+
+  .header {
+    text-decoration: underline;
+    margin: 0% 0% 3% 0%;
+  }
+
+  .settingsBtn {
+    z-index: 5;
+    cursor: pointer;
+    margin: 1%;
+    // height:5vh;
+    // width: 5vh;
+    font-size: 5vh;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .settingsHolder {
+    &.hidden {
+      max-height: 0vh;
+      padding: 0% 4%;
+    }
+
+    transition: max-height 500ms ease, padding 500ms ease;
+    position: relative;
+    padding: 2% 4%;
+    // background: #494949;
+    background: black;
+    max-height: 100vh;
+    width: 100%;
+    position: absolute;
+    // transform: translateY(-22vh);
+    // bottom: 0;
+    // border-radius: 2vh;
+    overflow: hidden;
+
+    background: rgba(255, 255, 255, 0.075);
+    // box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 0 0 5vh 5vh;
+    // border: .2vh solid rgba(255, 255, 255, 0.18);
+
+    .inner {
+    }
+  }
+
+  .set1 {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .sliderHolder {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .sliderLabel {
+      text-align: left;
+    }
+  }
+}
