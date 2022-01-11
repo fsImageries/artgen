@@ -18,7 +18,7 @@ const Home = () => {
   //     cvs.width = window.innerWidth
   //     cvs.height = window.innerHeight
   //     dotsRef.current = new WaveDots(ctx, window.innerWidth, window.innerHeight);
-  //     // dotsRef.current.animate()
+  //     dotsRef.current.animate()
   //   }
 
   //   const clickHandler = (e:MouseEvent) => {

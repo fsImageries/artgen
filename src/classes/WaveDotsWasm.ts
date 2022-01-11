@@ -14,8 +14,8 @@ const loadWaveDots = async (drawDot: any, anim: any, instance: WaveDots) => {
       // setTimeout: anim,
       consolef64: console.log,
       consoleBool: console.log,
-      performanceLog: ()=>console.log(performance.now()),
-      performance: ()=>performance.now(),
+      performanceLog: () => console.log(performance.now()),
+      performance: () => performance.now(),
     },
   });
 
@@ -47,7 +47,7 @@ class WaveDots {
 
     loadWaveDots(
       // (x: number, y: number, opacity: number) => {
-      ([x,y]:number[], opacity: number) => {
+      ([x, y]: number[], opacity: number) => {
         WaveDots.drawDot(ctx, x, y, opacity, 1, "rgb(255, 255,255)");
       },
       (func: any, time: number) => {
@@ -58,8 +58,8 @@ class WaveDots {
   }
 
   animate() {
-    // this.ctx.fillStyle = "rgb(0, 0,0)";
-    // this.ctx.fillRect(0, 0, this.width, this.height);
+    this.ctx.fillStyle = "rgb(0, 0,0)";
+    this.ctx.fillRect(0, 0, this.width, this.height);
     this.engine.draw();
 
     requestAnimationFrame(this.animate.bind(this));
@@ -71,13 +71,16 @@ class WaveDots {
     y: number,
     opacity: number,
     radius: number,
-    color: string
+    color: string,
   ) {
+
     ctx.save();
     ctx.beginPath();
+
     ctx.strokeStyle = color;
-    ctx.globalAlpha = opacity;
     ctx.fillStyle = color;
+    ctx.globalAlpha = opacity;
+
     ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
     ctx.fill();
     ctx.restore();

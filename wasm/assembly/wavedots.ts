@@ -6,6 +6,18 @@ declare function drawDot(xy: Array<f64>, o: f64): void;
 declare function performanceLog(): void;
 declare function performance(): f64;
 
+class Dot{
+  x: f64;
+  y: f64;
+  times:Array<f64>;
+
+  constructor(x: f64, y: f64){
+    this.x = x;
+    this.y = y;
+    this.times = []
+  }
+}
+
 export class WaveDots {
   width: f64;
   height: f64;
@@ -59,20 +71,12 @@ export class WaveDots {
     for (let i = 0; i < this.particles.length; i++) {
       const particle = this.particles[i];
 
-      const opacity = this.determineOpacity(particle, timestamp);
-      const target = particle[2];
-      const active = target < timestamp;
-
       drawDot(
         [particle[0], particle[1]],
-        // target === -1 ? 0 : active ? 0 : 1
-        // target === 0 ? 0 : active ? 1 : 0
-        opacity
+        this.determineOpacity(particle, timestamp)
       );
     }
   }
-
-  first: boolean = false;
 
   determineOpacity(particle: Array<f64>, timestamp: f64): f64 {
     const targetIn = particle[2];
@@ -80,32 +84,12 @@ export class WaveDots {
 
     if (targetIn === -1) return 0;
 
-    let ret: f64 = 0;
     const active = targetIn < timestamp;
     const deactive = targetOut < timestamp;
 
-    // const diff = targetOut- targetIn
-    // const target = timestamp - targetIn
-    // const deactive = diff < target
-
-    // const deactive = (targetIn*100) < timestamp;
-    // const deactive = targetIn + 5 < timestamp
-
-    // if (!this.first){
-    //   consolef64(targetIn)
-    //   consolef64(timestamp)
-    //   consolef64(targetOut)
-    //   consoleBool(false)
-    //   consoleBool(false)
-    //   // this.first = true
-    // }
-
+    let ret: f64 = 0;
     if (active) ret = 1;
-    // if (deactive) ret = 0;
-
-    // if (deactive !== false){
-    //   consolef64(ret)
-    // }
+    if (deactive) ret = 0;
 
     return ret;
   }
