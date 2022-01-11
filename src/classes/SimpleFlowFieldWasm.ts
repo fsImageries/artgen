@@ -1,5 +1,5 @@
 import * as AsBind from "as-bind"; //! types changed in module itself, big no-no
-const wasm = fetch("../../wasm/build/optimized.wasm");
+const wasm = fetch("../../wasm/build/SimpleFlowField.wasm");
 
 
 const asBindInstance = await AsBind.instantiate(wasm);

@@ -1,33 +1,55 @@
 import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import WaveDots from "../classes/WaveDot";
+// import WaveDots from "../classes/WaveDot";
+import WaveDots from "../classes/WaveDotsWasm";
 
 import "../styles/home.scss";
 
 const Home = () => {
   const cvsRef = useRef<HTMLCanvasElement>(null);
-  const dotsRef = useRef<WaveDots|null>(null);
+  const dotsRef = useRef<WaveDots | null>(null);
+
+  // useEffect(() => {
+  //   const cvs = cvsRef.current
+  //   const ctx = cvs?.getContext("2d");
+
+  //   if (cvs && ctx){
+  //     cvs.width = window.innerWidth
+  //     cvs.height = window.innerHeight
+  //     dotsRef.current = new WaveDots(ctx, window.innerWidth, window.innerHeight);
+  //     // dotsRef.current.animate()
+  //   }
+
+  //   const clickHandler = (e:MouseEvent) => {
+  //     if (dotsRef.current) {
+  //       dotsRef.current.waveThrough(e.x, e.y)
+  //     }
+  //   }
+  //   window.addEventListener("click", clickHandler)
+
+  //   return ()=>window.removeEventListener("click", clickHandler)
+  // }, []);
 
   useEffect(() => {
-    const cvs = cvsRef.current
+    const cvs = cvsRef.current;
     const ctx = cvs?.getContext("2d");
 
-    if (cvs && ctx){
-      cvs.width = window.innerWidth
-      cvs.height = window.innerHeight
+    if (cvs && ctx) {
+      cvs.width = window.innerWidth;
+      cvs.height = window.innerHeight;
       dotsRef.current = new WaveDots(ctx, window.innerWidth, window.innerHeight);
-      dotsRef.current.animate()
+      // wavedots.animate()
     }
 
-    const clickHandler = (e:MouseEvent) => {
+    const clickHandler = (e: MouseEvent) => {
       if (dotsRef.current) {
-        dotsRef.current.waveThrough(e.x, e.y)
+        dotsRef.current.engine.waveThrough(e.x, e.y);
       }
-    }
-    window.addEventListener("click", clickHandler)
+    };
+    window.addEventListener("click", clickHandler);
 
-    return ()=>window.removeEventListener("click", clickHandler)
+    return () => window.removeEventListener("click", clickHandler);
   }, []);
 
   return (

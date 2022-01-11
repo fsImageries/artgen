@@ -49,6 +49,7 @@ class WaveDots {
 
     this.particles = [];
     this.init();
+    this.draw()
   }
 
   init() {
@@ -60,7 +61,7 @@ class WaveDots {
             x * this.pointDensity,
             y * this.pointDensity,
             1,
-            0,
+            1,
             this.color
           )
         );

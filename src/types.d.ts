@@ -1,6 +1,6 @@
 declare module "as-bind"
 
 export interface FlowFieldValues {
-    scale: number;
-    cellSize: number;
+  scale: number;
+  cellSize: number;
 }
