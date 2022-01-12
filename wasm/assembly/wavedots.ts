@@ -1,20 +1,20 @@
-// declare function drawDot(x: f64, y: f64, o: f64): void;
-// declare function setTimeout(func: () => void, time: f64): void;
 declare function consolef64(v: f64): void;
 declare function consoleBool(v: boolean): void;
 declare function drawDot(xy: Array<f64>, o: f64): void;
 declare function performanceLog(): void;
 declare function performance(): f64;
 
-class Dot{
+class Dot {
   x: f64;
   y: f64;
-  times:Array<f64>;
+  inTimes: Array<f64>;
+  outTimes: Array<f64>;
 
-  constructor(x: f64, y: f64){
+  constructor(x: f64, y: f64) {
     this.x = x;
     this.y = y;
-    this.times = []
+    this.inTimes = [];
+    this.outTimes = [];
   }
 }
 
@@ -28,7 +28,7 @@ export class WaveDots {
   distance: f64;
   private _pointDensity: f64;
 
-  particles: Array<Array<f64>>;
+  particles: Array<Dot>;
 
   constructor(width: f64, height: f64) {
     this.width = width;
@@ -55,13 +55,12 @@ export class WaveDots {
       for (let y = 0.0; y < iterH; y++) {
         const idx = x * iterH + y;
 
-        // x, y, opacity, toTurnVisibleTime
-        this.particles[idx as i32] = [
+        const particle = new Dot(
           x * this._pointDensity + this._pointDensity / 2,
-          y * this._pointDensity + this._pointDensity / 2,
-          -1.0, // target time fade-in
-          -1.0, // target time fade-out
-        ];
+          y * this._pointDensity + this._pointDensity / 2
+        );
+
+        this.particles[idx as i32] = particle;
       }
     }
   }
@@ -72,50 +71,81 @@ export class WaveDots {
       const particle = this.particles[i];
 
       drawDot(
-        [particle[0], particle[1]],
+        [particle.x, particle.y],
         this.determineOpacity(particle, timestamp)
       );
     }
   }
 
-  determineOpacity(particle: Array<f64>, timestamp: f64): f64 {
-    const targetIn = particle[2];
-    const targetOut = particle[3];
+  cleanTimes(): void {
+    const timestamp = performance();
+    for (let i = 0; i < this.particles.length; i++) {
+      const particle = this.particles[i];
 
-    if (targetIn === -1) return 0;
+      const toDelete: Array<i32> = [];
 
-    const active = targetIn < timestamp;
-    const deactive = targetOut < timestamp;
+      const outTimes:Array<f64> = []
+      for (let idx = 0; idx < particle.outTimes.length; idx++) {
+        const time = particle.outTimes[idx]
+        const isGone = time < timestamp;
+        if (isGone) toDelete.push(idx);
+        else outTimes.push(time)
+      }
+
+      const inTimes:Array<f64> = []
+      for (let idx = 0; idx < particle.inTimes.length; idx++){
+        if (!toDelete.includes(idx)) inTimes.push(particle.inTimes[idx])
+      }
+
+      particle.outTimes = outTimes
+      particle.inTimes = inTimes
+
+      this.particles[i] = particle;
+    }
+  }
+
+  determineOpacity(particle: Dot, timestamp: f64): f64 {
+    if (!particle.inTimes.length) return 0;
 
     let ret: f64 = 0;
-    if (active) ret = 1;
-    if (deactive) ret = 0;
+    for (let i = 0; i < particle.inTimes.length; i++) {
+      const targetIn = particle.inTimes[i];
+      const targetOut = particle.outTimes[i];
+
+      const active = targetIn < timestamp;
+      const deactive = targetOut < timestamp;
+
+      if (active) ret = 1;
+      if (deactive) ret = 0;
+
+      if (ret) return ret;
+    }
 
     return ret;
   }
 
   waveThrough(x: f64, y: f64): void {
+    this.cleanTimes();
+
     const timestamp = performance();
     for (let i = 0; i < this.particles.length; i++) {
       const particle = this.particles[i];
-      const dx = x - particle[0];
-      const dy = y - particle[1];
+      const dx = x - particle.x;
+      const dy = y - particle.y;
 
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       const time = dist / 500;
 
       const targetIn = timestamp + time * 500;
-      const targetOut = timestamp + (time * 500) + 50;
+      const targetOut = targetIn + 50;
 
-      this.particles[i][2] = targetIn;
-      this.particles[i][3] = targetOut;
+      particle.inTimes.push(targetIn);
+      particle.outTimes.push(targetOut);
     }
-  }
 
-  assignOpacity(idx: i32, opacity: f64): void {
-    const particle = this.particles[idx];
-    this.particles[idx] = [particle[0], particle[1], opacity];
+    // consolef64(this.particles[0].inTimes.length);
+    // consolef64(this.particles[0].outTimes.length);
   }
 
   // Properties
