@@ -6,7 +6,7 @@
       "debug": true
     },
     "release": {
-      "binaryFile": "build/WaveDots.wasm",
+      "binaryFile": "build/optimized.wasm",
       "sourceMap": true,
       "optimizeLevel": 3,
       "shrinkLevel": 0,

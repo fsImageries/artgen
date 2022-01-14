@@ -4,7 +4,8 @@
     "asbuild:optimized": "asc assembly/index.ts --target release --exportRuntime --transform as-bind",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "test": "node tests",
-    "asbuild:select": "asc --target release --exportRuntime --transform as-bind"
+    "asbuild:select": "asc --target release --exportRuntime --transform as-bind",
+    "asbuild:select2": "asc --target release --exportRuntime --transform as-bind --binaryFile"
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.19.22"

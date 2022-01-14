@@ -104,14 +104,9 @@ class SimpleFlowFieldWasm {
 
     let stepArrFull = [];
     for (let i = 0; i < stepArr.length; i++) {
-      // if (i === 0) console.log(stepArr[i])
-
       const ptr = stepArr[i];
       if (ptr !== 0) stepArrFull[i] = __getArray(ptr);
-      // console.log(ptr)
     }
-
-    // console.log(__getArray(stepArr[0]))
     return stepArrFull;
   }
 

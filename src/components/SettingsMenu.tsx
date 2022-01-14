@@ -1,6 +1,10 @@
 import React, {useState} from 'react'
 
-const SettingsMenu = ({children}:any) => {
+interface props{
+  children: JSX.Element[]
+}
+
+const SettingsMenu = ({children}:props) => {
     const [settingsOpen, setSettingsOpen] = useState(false);
 
     return (

@@ -21,19 +21,28 @@ class Dot {
 export class WaveDots {
   width: f64;
   height: f64;
-
   iterW: f64;
   iterH: f64;
 
   distance: f64;
-  private _pointDensity: f64;
+  timeM: f64;
+  timeO: f64;
+  thickness: f64;
+
+  isFadeEnd: bool;
+  isDebug: bool;
 
   particles: Array<Dot>;
+
+  private _pointDensity: f64;
 
   constructor(width: f64, height: f64) {
     this.width = width;
     this.height = height;
     this.distance = 100.0;
+    this.timeM = 500.0;
+    this.timeO = 50.0;
+    this.thickness = 500.0;
     this._pointDensity = 30.0;
 
     this.particles = new Array(0);
@@ -48,12 +57,9 @@ export class WaveDots {
   }
 
   initParticles(): void {
-    const iterW = Math.floor(this.width / this._pointDensity);
-    const iterH = Math.floor(this.height / this._pointDensity);
-
-    for (let x = 0.0; x < iterW; x++) {
-      for (let y = 0.0; y < iterH; y++) {
-        const idx = x * iterH + y;
+    for (let x = 0.0; x < this.iterW; x++) {
+      for (let y = 0.0; y < this.iterH; y++) {
+        const idx = x * this.iterH + y;
 
         const particle = new Dot(
           x * this._pointDensity + this._pointDensity / 2,
@@ -77,33 +83,6 @@ export class WaveDots {
     }
   }
 
-  cleanTimes(): void {
-    const timestamp = performance();
-    for (let i = 0; i < this.particles.length; i++) {
-      const particle = this.particles[i];
-
-      const toDelete: Array<i32> = [];
-
-      const outTimes:Array<f64> = []
-      for (let idx = 0; idx < particle.outTimes.length; idx++) {
-        const time = particle.outTimes[idx]
-        const isGone = time < timestamp;
-        if (isGone) toDelete.push(idx);
-        else outTimes.push(time)
-      }
-
-      const inTimes:Array<f64> = []
-      for (let idx = 0; idx < particle.inTimes.length; idx++){
-        if (!toDelete.includes(idx)) inTimes.push(particle.inTimes[idx])
-      }
-
-      particle.outTimes = outTimes
-      particle.inTimes = inTimes
-
-      this.particles[i] = particle;
-    }
-  }
-
   determineOpacity(particle: Dot, timestamp: f64): f64 {
     if (!particle.inTimes.length) return 0;
 
@@ -113,7 +92,8 @@ export class WaveDots {
       const targetOut = particle.outTimes[i];
 
       const active = targetIn < timestamp;
-      const deactive = targetOut < timestamp;
+
+      const deactive = this.isFadeEnd ? targetOut < timestamp : false;
 
       if (active) ret = 1;
       if (deactive) ret = 0;
@@ -124,10 +104,37 @@ export class WaveDots {
     return ret;
   }
 
+  cleanTimes(): void {
+    const timestamp = performance();
+    for (let i = 0; i < this.particles.length; i++) {
+      const particle = this.particles[i];
+
+      const toDelete: Array<i32> = [];
+
+      const outTimes: Array<f64> = [];
+      for (let idx = 0; idx < particle.outTimes.length; idx++) {
+        const time = particle.outTimes[idx];
+        const isGone = time < timestamp;
+        if (isGone) toDelete.push(idx);
+        else outTimes.push(time);
+      }
+
+      const inTimes: Array<f64> = [];
+      for (let idx = 0; idx < particle.inTimes.length; idx++) {
+        if (!toDelete.includes(idx)) inTimes.push(particle.inTimes[idx]);
+      }
+
+      particle.outTimes = outTimes;
+      particle.inTimes = inTimes;
+
+      this.particles[i] = particle;
+    }
+  }
+
   waveThrough(x: f64, y: f64): void {
     this.cleanTimes();
-
     const timestamp = performance();
+
     for (let i = 0; i < this.particles.length; i++) {
       const particle = this.particles[i];
       const dx = x - particle.x;
@@ -135,17 +142,19 @@ export class WaveDots {
 
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      const time = dist / 500;
+      const time = dist / this.thickness;
 
-      const targetIn = timestamp + time * 500;
-      const targetOut = targetIn + 50;
+      const targetIn = timestamp + time * this.timeM;
+      const targetOut = targetIn + this.timeO;
 
       particle.inTimes.push(targetIn);
       particle.outTimes.push(targetOut);
     }
 
-    // consolef64(this.particles[0].inTimes.length);
-    // consolef64(this.particles[0].outTimes.length);
+    if (this.isDebug) {
+      consolef64(this.particles[0].inTimes.length);
+      consolef64(this.particles[0].outTimes.length);
+    }
   }
 
   // Properties
