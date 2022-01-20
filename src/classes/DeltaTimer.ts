@@ -10,6 +10,15 @@ export default class DeltaTimer {
     this.interval = 1000 / 60;
   }
 
+  start(){
+    this._animate(0)
+  }
+
+  reset(){
+    cancelAnimationFrame(this.animationID)
+    this.start()
+  }
+
   animate(){
       throw new Error("Not implemented, is not used to be called by itself.")
   }

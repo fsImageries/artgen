@@ -11,7 +11,7 @@ import "../styles/simpleFlowField.scss";
 let resizeId: number;
 
 const SimpleFlowFieldRoute = () => {
-  const [shouldCompare, setCompare] = useState(true);
+  const [shouldCompare, setCompare] = useState(false);
 
   const set1Ref = useRef<HTMLCanvasElement>(null);
   const flowFieldRef = useRef<SimpleFlowFieldWasm | null>(null);
@@ -157,7 +157,7 @@ const SimpleFlowFieldRoute = () => {
 
         <Checkbox
           label="Compare JS"
-          defaultV={true}
+          defaultV={shouldCompare}
           setController={(v) => setCompare(v)}
         />
       </SettingsMenu>

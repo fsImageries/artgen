@@ -8,7 +8,7 @@ interface props {
 }
 
 const Checkbox = ({ label, defaultV, setController }: props) => {
-  const [checkVal, setCheckVal] = useState(defaultV ? defaultV : false);
+  const [checkVal, setCheckVal] = useState(defaultV !== undefined ? defaultV : false);
   const componentID = uuidv4();
 
   useEffect(() => {

@@ -5,7 +5,8 @@
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "test": "node tests",
     "asbuild:select": "asc --target release --exportRuntime --transform as-bind",
-    "asbuild:select2": "asc --target release --exportRuntime --transform as-bind --binaryFile"
+    "asbuild:select2": "asc --target release --exportRuntime --transform as-bind --binaryFile",
+    "asbuild:info": "asc assembly/utils.ts --binaryFile build/utils.wasm"
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.19.22"

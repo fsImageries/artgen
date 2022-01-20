@@ -21,7 +21,7 @@ class WaveDots extends DeltaTimer {
   }
 
   async initWasm() {
-    const wasm = fetch("../../wasm/build/WaveDots.wasm");
+    const wasm = fetch("../../wasm/build/wavedots.wasm");
 
     const imports = {
       wavedots: {
@@ -51,7 +51,8 @@ class WaveDots extends DeltaTimer {
     );
 
     this.gradient.addColorStop(0, "rgba(255,255,255,1)");
-    this.gradient.addColorStop(1, "rgba(127,127,127,.5)");
+    this.gradient.addColorStop(.75, "rgba(127,127,127,.5)");
+    this.gradient.addColorStop(1, "rgba(127,127,127,0)");
 
     this.ctx.strokeStyle = this.gradient;
   }
