@@ -1,10 +1,13 @@
 import { useLayoutEffect, useEffect, useRef, useState } from "react";
+
 import SimpleFlowField from "../classes/SimpleFlowField";
 import SimpleFlowFieldWasm from "../classes/SimpleFlowFieldWasm";
 
 import Slider from "../components/Slider";
 import Checkbox from "../components/Checkbox";
 import SettingsMenu from "../components/SettingsMenu";
+import SlidingTitles from "../components/SlidingTitles";
+
 
 import "../styles/simpleFlowField.scss";
 
@@ -22,7 +25,7 @@ const SimpleFlowFieldRoute = () => {
     scale: 0.01,
     cellSize: 15,
     radius: 5,
-    length: 20,
+    length: 0,
   });
 
   const assignFlowField = (canvas2 = false) => {
@@ -147,7 +150,7 @@ const SimpleFlowFieldRoute = () => {
           min={1}
           max={100}
           step={1}
-          value={10}
+          value={fieldValues.length}
           setController={(v) =>
             setFieldValues((s) => {
               return { ...s, length: v };
@@ -161,6 +164,12 @@ const SimpleFlowFieldRoute = () => {
           setController={(v) => setCompare(v)}
         />
       </SettingsMenu>
+
+      <SlidingTitles duration={3}
+      onFirstAnimEnd={()=>setFieldValues((s) => {
+        return { ...s, length: 10 };
+      })}
+      >ArtGen FlowField</SlidingTitles>
     </div>
   );
 };

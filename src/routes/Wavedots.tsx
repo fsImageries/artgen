@@ -6,11 +6,13 @@ import WaveDots from "../classes/WaveDotsWasm";
 import { parseViewUnit } from "../helpers/utils";
 import initScroller, { calcRangePercent } from "../classes/ScrollerMeasure";
 
+import SlidingTitles from "../components/SlidingTitles";
+
 const wasmscroller = await initScroller();
 // console.log(wasmscroller.parseViewUnit("55vh"))
 // console.log(parseViewUnit("55vh"))
 
-import "../styles/home.scss";
+import "../styles/wavedots.scss";
 
 type ret = [React.MutableRefObject<any>, (data: any) => void];
 const useEffectState = (init: any): ret => {
@@ -24,7 +26,7 @@ const useEffectState = (init: any): ret => {
   return [stateRef, setState];
 };
 
-const Home = () => {
+const Wavedots = () => {
   const cvsRef = useRef<HTMLCanvasElement>(null);
   const dotsRef = useRef<WaveDots | null>(null);
   const mousePosRef = useRef({
@@ -177,14 +179,18 @@ const Home = () => {
         )
       );
 
-      scrollPerc = wasmscroller.dissolve(true, parseViewUnit("5vh"), parseViewUnit("55vh"), false) 
+      scrollPerc = wasmscroller.dissolve(
+        true,
+        parseViewUnit("5vh"),
+        parseViewUnit("55vh"),
+        false
+      );
       // console.log(scrollPerc)
-      setter(galleryTitleRef, "transform")(`translateY(${scrollPerc}em)`)
+      setter(galleryTitleRef, "transform")(`translateY(${scrollPerc}em)`);
       // setter(galleryTitleRef)(wasmscroller.parallax(base * 1, NaN, NaN));
 
       // scrollPerc = wasmscroller.dissolve(false, parseViewUnit("40vh"),parseViewUnit("60vh"), false)
       // setter(whiteBorderRef, "--border-size")(`${scrollPerc*2}vh`)
-
     };
 
     window.addEventListener("click", clickHandler);
@@ -193,7 +199,7 @@ const Home = () => {
     // window.addEventListener("scroll", scrollHandler);
 
     // scrollHandler();
-    intervalWaves();
+    // intervalWaves();
 
     return () => {
       window.removeEventListener("click", clickHandler);
@@ -202,6 +208,10 @@ const Home = () => {
       // window.removeEventListener("scroll", scrollHandler);
     };
   }, []);
+
+  useEffect(() => {
+    if (introDone) intervalWaves();
+  }, [introDone])
 
   const footerHolderRef = useRef<HTMLDivElement>(null);
   const scrollIconRef = useRef<HTMLDivElement>(null);
@@ -215,94 +225,29 @@ const Home = () => {
 
   return (
     <div className="home App">
-      <div className="landingHolder">
-        <div className="titleHolder">
-          <div className="textWrapper" ref={title1Ref}>
-            <div
-              className="text"
-              onAnimationEnd={() => {
-                const engine = dotsRef.current?.engine;
-                if (engine) engine.isFadeEnd = 1;
-                // engine.waveThrough(window.innerWidth / 2, window.innerHeight / 2);
-                setTimeout(() => setIntroDone(true), 500);
-              }}
-            >
-              ArtGen
-            </div>
-          </div>
-          <div className="textWrapper" ref={title2Ref}>
-            <div
-              className="text"
-              style={{
-                fontWeight: 100,
-                fontSize: "2vw",
-                animationDelay: "100ms",
-              }}
-            >
-              Personal{" "}
-            </div>
-          </div>
-          <div className="textWrapper" ref={title3Ref}>
-            <div
-              className="text"
-              style={{
-                fontWeight: 800,
-                fontSize: "2vw",
-                animationDelay: "300ms",
-              }}
-            >
-              Generative Art
-            </div>
-          </div>
-          <div className="textWrapper" ref={title4Ref}>
-            <div
-              className="text"
-              style={{
-                fontWeight: 100,
-                fontSize: "2vw",
-                animationDelay: "500ms",
-              }}
-            >
-              Portfolio
-            </div>
-          </div>
-        </div>
-        {/* <div
-          className={`footerHolder ${introDone ? "active" : ""}`}
-          ref={footerHolderRef}
-          // style={{transform: `translateY(${-2000 * percent.current.percent}px)`}}
-          // style={style}
-        >
+      {/* <div className="titleHolder">
+        <div className="textWrapper" ref={title1Ref}>
           <div
-            className="scrollIcon"
-            ref={scrollIconRef}
-            onClick={() => {
-              const wu = document.querySelector(".galleryHolder");
-              wu?.scrollIntoView({behavior:"smooth"});
-            }}
+            className="text"
           >
-            <div className="scroller" ref={scrollerRef}></div>
-          </div>
-        </div>*/}
-      </div> 
-
-      {/* <div className="galleryHolder">
-        <div className="textWrapper">
-          <div className="title" ref={galleryTitleRef}>Works</div>
-        </div>
-
-        <div className="worksHolder">
-          <div className="work flowfield">
-            <iframe src="/#/flowField" frameBorder="0"></iframe>
+            ArtGen
           </div>
         </div>
-      </div>
 
-      <div className="whiteBorder" ref={whiteBorderRef}></div> */}
+        <div className="textWrapper" ref={title1Ref}>
+          <div className="text" style={{ animationDelay: "1.65s" }}>
+            WaveDots
+          </div>
+        </div>
+      </div> */}
+
+      <SlidingTitles duration={3} delay={1.65}
+      onFirstAnimEnd={()=>setIntroDone(true)}
+      >ArtGen WaveDots</SlidingTitles>
 
       <canvas ref={cvsRef} className="waves"></canvas>
     </div>
   );
 };
 
-export default Home;
+export default Wavedots;
